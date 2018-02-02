@@ -37,14 +37,22 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+        //URL美化
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
     ],
+
+    //设置语言
+    'language'=>'zh-CN',
+    //不使用母版页
+    'layout' => 0,
+    //修改默认路由
+    'defaultRoute'=>'index/index',
+
     'params' => $params,
 ];
