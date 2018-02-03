@@ -11,7 +11,16 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        //RBAC权限控制
+        'rbac' =>  [
+            'class' => 'johnitvn\rbacplus\Module'
+        ],
+        'gridview' =>  [
+            'class' => '\kartik\grid\Module',
+            //此扩展使用于 kartik-v/yii2-grid ，故在此之前必须使用 gridview module
+        ]
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
@@ -43,6 +52,10 @@ return [
             'showScriptName' => false,
             'rules' => [
             ],
+        ],
+        //RBAC权限控制
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
         ],
 
     ],
