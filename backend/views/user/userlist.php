@@ -40,6 +40,6 @@
     </script>
 </form>
 <script type="text/javascript" src="<?=Yii::$app->params['admin_web_url']?>/layui/layui/layui.js"></script>
-<script type="text/javascript" src="<?=Yii::$app->params['admin_web_url']?>/layui/page/user/userList.js"></script>
+<script type="text/javascript" src="<?=Yii::$app->params['admin_web_url']?>/assets/js/layui/userList.js"></script>
 </body>
 </html>

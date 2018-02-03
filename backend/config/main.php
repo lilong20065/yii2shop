@@ -25,10 +25,20 @@ return [
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],
-        'user' => [
+        /*'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+        ],*/
+
+        'user' => [
+            //指定一个实现认证接口的类，一般就是账号对应的类
+            'class'=>'yii\web\User',
+            'identityClass' => 'backend\models\User',
+            'enableAutoLogin' => true,
+            'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            //设置默认登录地址
+            'loginUrl'=>['day4/login']
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
@@ -56,6 +66,10 @@ return [
         //RBAC权限控制
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
+            'itemTable' => '{{%auth_item}}',
+            'assignmentTable' => '{{%auth_assignment}}',
+            'itemChildTable' => '{{%auth_item_child}}',
+            'ruleTable' => '{{%auth_rule}}',
         ],
 
     ],
