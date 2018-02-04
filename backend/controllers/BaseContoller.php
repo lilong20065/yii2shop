@@ -14,8 +14,9 @@ class BaseContoller extends \yii\web\Controller
         $permissionName = $action->controller->module->requestedRoute;
         if(!\Yii::$app->user->can($permissionName) && \Yii::$app->getErrorHandler()->exception === null){
             //throw new \yii\web\UnauthorizedHttpException('对不起，您现在还没获'.$permissionName.'操作的权限');
-            //return false;
-            return true;
+            $this->redirect(['public/unauthorized']);
+            return false;
+            //return true;
         }else{
             return true;
         }

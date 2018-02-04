@@ -13,6 +13,40 @@ use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
 {
+
+
+    public function rules()
+    {
+        return [
+            [
+                [
+                    'username',
+                    'realname',
+                    'password',
+                    'tel',
+                    'email',
+                    'sex',
+                    'roleid',
+                    'birthday',
+                    'province',
+                    'city',
+                    'area',
+                    'info'
+                ], 'required'
+            ]
+        ];
+    }
+
+    //定义标签名称
+    public function attributeLabels()
+    {
+        return [
+            'province'=>'省份',
+            'city'=>'城市',
+            'area'=>'区域'
+        ];
+    }
+
     //
     /**
      * Finds an identity by the given ID.

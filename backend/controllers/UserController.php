@@ -19,6 +19,14 @@ class UserController extends BaseContoller
 {
     //用户列表
     public function actionUserList(){
+        if(\Yii::$app->request->isAjax){
+            $data['code'] = 0;
+            $data['msg'] = '成功';
+            $user = User::find()->asArray()->all();
+            $data['data'] = $user;
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+            return $data;
+        }
         return $this->render('userlist');
     }
 
@@ -27,26 +35,38 @@ class UserController extends BaseContoller
 
         //添加角色
         if(\Yii::$app->request->isAjax){
-
-            $post = \Yii::$app->request->post();
-
-            $model = new User();
-            $model->username = $post['username'];
-            $model->realname = $post['realname'];
-            $model->email = $post['email'];
-            $model->info = $post['info'];
-            $model->password = $post['password'];
-            $model->status = $post['status'];
-            $model->save();
-            $msg = '登录成功';
+            //返回数据格式
             \Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['code'=>1,'message'=>$msg];
+            //获取AJAX数据
+            $post = \Yii::$app->request->post();
+            //实例化USER类
+            $model = new User();
+            //排除非数据库字段，不然MODEL会报错
+            unset($post['_csrf-backend']);
+            unset($post['repassword']);
+            //自动加载全部数据到MODEL
+            $model->load($post,'');
+            //再次验证数据，永远不要相信用户提交的数据0
+            if($model->validate()){
+                if($model->save()){
+                    return ['code'=>1,'message'=>'添加成功'];
+                }else{
+                    return ['code'=>0,'message'=>$model->getErrors()];
+                }
+            }else{
+                return ['code'=>0,'message'=>$model->getErrors()];
+            }
+            //echo json_encode($data);exit;
         }
 
         return $this->render('useradd');
     }
 
-
+    public function actionCroles(){
+        $name['name'] = 'user/user-list';
+        $name['description'] = 'user/user-list info';
+        $this->createPermission($name);
+    }
     //添加角色和权限
     //创建权限
     public function createPermission($name)
@@ -57,6 +77,11 @@ class UserController extends BaseContoller
         $auth->add($createPost);
     }
 
+    public function actionCrole(){
+        $name = 1;
+        //$name['description'] = '管理员';
+        $this->createRole($name);
+    }
     //创建角色
     public function createRole($name)
     {
@@ -98,8 +123,11 @@ class UserController extends BaseContoller
             $permissions = [];
             //Helper::dump($dir);
             //Helper::dump($controllers);
+            //unset($controllers[1]);
             foreach ($controllers as $controller) {
+                //Helper::dump($controller);
                 $content = file_get_contents($controller);
+                //Helper::dump($content);
                 //找到Controller即可
                 preg_match('/class ([a-zA-Z]+)Controller/', $content, $match);
                 $cName = $match[1];
@@ -111,7 +139,7 @@ class UserController extends BaseContoller
                 }
             }
             $auth = \Yii::$app->authManager;
-
+            //Helper::dump($permissions);
             //为什么$auth可以操作到该表
             foreach ($permissions as $permission) {
                 //是否存在该权限
@@ -120,7 +148,7 @@ class UserController extends BaseContoller
                     $obj->description = $permission;
                     $auth->add($obj);
                 }
-                //Helper::dump($permission);
+
             }
             $trans->commit();
             echo "import success \n";

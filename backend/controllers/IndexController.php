@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 
+use backend\models\User;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -36,10 +37,11 @@ class IndexController extends Controller
     public function actionAjaxLogin(){
         //简单的SESSION操作
         \Yii::$app->session->set('admin_name','管理员');
-        //$this->redirect(['index/index']);
+        $user = User::findOne(2);
+        \Yii::$app->user->login($user);
+
         \Yii::$app->response->format = Response::FORMAT_JSON;
-        $msg = '登录成功';
-        return ['code'=>1,'message'=>$msg];
+        return ['code'=>1,'message'=>'登录成功'];
     }
 
     //退出登录

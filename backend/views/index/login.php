@@ -40,7 +40,7 @@
     </div>
 </form>
 <script type="text/javascript" src="<?=Yii::$app->params['admin_web_url']?>/layui/layui/layui.js"></script>
-<script type="text/javascript" src="<?=Yii::$app->params['admin_web_url']?>/layui/page/login/login.js"></script>
+<script type="text/javascript" src="<?=Yii::$app->params['admin_web_url']?>/assets/js/layui/login.js"></script>
 <script type="text/javascript" src="<?=Yii::$app->params['admin_web_url']?>/layui/js/cache.js"></script>
 </body>
 </html>

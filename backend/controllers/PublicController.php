@@ -21,28 +21,32 @@ class PublicController extends \yii\web\Controller
     {
         $user_id = \Yii::$app->user->getId();
         if($user_id==null){
-            /*echo 'None Login.';
-            return false;*/
-            return true;
+            echo json_encode(['code'=>-6789,'message'=>'您无权限操作此项']);
+            return false;
         }else{
             return true;
         }
     }
 
-    //index
-    public function actionIndex(){
-        //echo 1;
-    }
-
     //ajax获得用户数据
+    //严格来说不应该放在这里，数据会被未授权用户看到
     public function actionUserListJson(){
         $data['code'] = 0;
         $data['msg'] = '成功';
         $user = User::find()->asArray()->all();
-        $data['data'] = $user;//Json::encode($user);
-        //helper::dump(Json::encode($data));
-        \Yii::$app->response->format = Response::FORMAT_JSON;  //Response::FORMAT_JSON;
+        $data['data'] = $user;
+        \Yii::$app->response->format = Response::FORMAT_JSON;
         return $data;
+    }
+
+    //404
+    public function action404(){
+        return $this->render('404');
+    }
+
+    //无权限
+    public function actionUnauthorized(){
+        return $this->render('unauthorized');
     }
 
 }
